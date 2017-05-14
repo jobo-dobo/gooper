@@ -96,8 +96,12 @@
 		string word = words[random_int(NUM_LINES)];
 		
 		// Prompt
-		cout << "Try to guess my word!" << endl;
-		cout << "\t\t";	// '\t' is the escape character for a tab
+		
+		cout << endl << ":::::::::::::::::::::::::" << endl
+			 << ": Try to guess my word! :" << endl
+			 << ":::::::::::::::::::::::::" << endl << endl;
+		
+		cout << "\t";	// '\t' is the escape character for a tab
 		
 		/* Unsigned indicates an unsigned int, i.e. no negatives.
 		 * You'll get a warning if you use a regular int for comparing
@@ -132,26 +136,32 @@
 				cout << '_';
 			}
 		}
-		cout << endl << "What could it be, baby? ";
+		cout << endl << endl << "What could it be, baby? ";
 		
 		// Take the player's guess
 		getline(cin, guess);	// "cin" is the standard input stream
+		
+		cout << endl;
 		
 		// Check the player's guess and print outcome
 		if (guess == word)
 		{
 			// Win
-			cout << "Your Winner!" << endl;
+			cout << ":):):):):):):):):)" << endl
+				 << ":) Your Winner! :)" << endl
+				 << ":):):):):):):):):)" << endl;
 		}
 		else
 		{
 			// Lose
-			cout << "You're are not good. Correct answer is \"" << word 
-				 << "." << endl;
+			cout << ":(:(:(:(:(:(:(:(:(:(:(:(:(" << endl
+				 << ":( You're are not good. :(" << endl
+				 << ":( Correct answer is \"" << word << "\"." << endl
+				 << ":(:(:(:(:(:(:(:(:(:(:(:(:(" << endl;
 		}
 		
 		// Ask to play again
-		cout << "Play again? (y/n)";
+		cout << endl << "Play again? (y/n)";
 		
 		// Get response
 		getline(cin, guess);	// I'm just reusing guess for input
@@ -162,6 +172,9 @@
 		
 		// Program will only perform another iteration of while loop if the first
 		// character (index 0) of the response is either 'y' or 'Y'
+		
+		// Output a blank line
+		cout << endl;
 	}
 	
 	 
