@@ -86,7 +86,7 @@
 	inf.close();
 	
 	// Now for the game
-	string guess;	// To hold the player's guesses
+	string guess, space;	// To hold the player's guesses
 	bool playing=true;	// For game loop
 	
 	// Game loop
@@ -94,6 +94,8 @@
 	{
 		// select a string from random index
 		string word = words[random_int(NUM_LINES)];
+		space = word;
+		bool guessing = true;
 		
 		// Prompt
 		
@@ -101,7 +103,7 @@
 			 << ": Try to guess my word! :" << endl
 			 << ":::::::::::::::::::::::::" << endl << endl;
 		
-		cout << "\t";	// '\t' is the escape character for a tab
+		
 		
 		/* Unsigned indicates an unsigned int, i.e. no negatives.
 		 * You'll get a warning if you use a regular int for comparing
@@ -110,6 +112,7 @@
 		 */
 		for (unsigned i=0; i<word.length(); i++)
 		{
+			
 			/*
 			 * Now's a good time to discuss the 'equals' operator.
 			 * It's used to check for equivalence and returns a bool.
@@ -124,24 +127,37 @@
 			 * the variable will be cast to a boolean where anything besides
 			 * "null" (whice is zero for an int) will be true.
 			 */
-			if (random_int(2) == 0) // 50% chance for each option below
+			if (word[i] != ' ' && random_int(2) == 0) // 50% chance for each option below
 			{
-				// Character from word
-				cout << word[i];	// strings can be treated like arrays
-									// of characters
-			}
-			else
-			{
-				// Hide character
-				cout << '_';
+				space[i] = '_';
 			}
 		}
-		cout << endl << endl << "What could it be, baby? ";
 		
-		// Take the player's guess
-		getline(cin, guess);	// "cin" is the standard input stream
-		
-		cout << endl;
+		while (guessing)
+		{
+			cout << endl << endl << "\t" << space << endl << endl;
+			cout << endl << endl << "What could it be, baby? ";
+			
+			// Take the player's guess
+			getline(cin, guess);	// "cin" is the standard input stream
+			
+			cout << endl;
+			
+			// Check if single letter
+			if (guess.length() == 1)
+			{
+				for (unsigned i=0; i<word.length(); i++)
+				{
+					if (space[i] == '_' && guess[0] == word[i])
+						space[i] = guess[0];
+				}
+			}
+			// Or final guess
+			else
+			{
+				guessing = false;
+			}
+		}
 		
 		// Check the player's guess and print outcome
 		if (guess == word)
