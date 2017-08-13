@@ -14,6 +14,8 @@
  
  using namespace std;
  
+ enum State {GALLOWS, HEAD, BODY, L_ARM, R_ARM, L_LEG, R_LEG, WILLY};
+ 
  /* A constant is defined once at compile time and cannot change
   * Use the keyword "const" in the variable's declaration to
   * make it constant.
@@ -25,6 +27,9 @@
  
  // Generate a random integer between 0 and max - 1
  int random_int(int max);
+ 
+ // Print display corresponding to current state
+ void print_hung(State state);
  
  int main()
  {
@@ -92,6 +97,9 @@
 	// Game loop
 	while (playing)	// A bool can be used as a condition directly
 	{
+		// initialize state
+		State state = GALLOWS;
+		
 		// select a string from random index
 		string word = words[random_int(NUM_LINES)];
 		space = word;
@@ -133,9 +141,17 @@
 			}
 		}
 		
+
 		while (guessing)
 		{
+			bool correct = false;
+			bool victory = true;
+			
+			// show state
+			print_hung(state);
+			
 			cout << endl << endl << "\t" << space << endl << endl;
+			
 			cout << endl << endl << "What could it be, baby? ";
 			
 			// Take the player's guess
@@ -148,13 +164,51 @@
 			{
 				for (unsigned i=0; i<word.length(); i++)
 				{
-					if (space[i] == '_' && guess[0] == word[i])
+					if (guess[0] == word[i])
+					{
 						space[i] = guess[0];
+						correct = true;
+					}
+					
+					if (space[i] == '_')
+					{
+						victory = false;
+					}
 				}
 			}
 			// Or final guess
 			else
 			{
+				victory = false;
+				guessing = false;
+			}
+			
+			
+			
+			// Change state
+			if (!correct)
+			{
+				state = State((int)state + 1);
+			}
+			
+			// Victory state
+			if (victory)
+			{
+				guessing = false;
+				guess = word;
+				
+				// show state
+				print_hung(state);
+				cout << endl << endl << "\t" << space << endl << endl;
+			}
+			
+			// Lose state
+			if (state == WILLY)
+			{
+				// show state
+				print_hung(state);
+				
+				// end guessing loop
 				guessing = false;
 			}
 		}
@@ -196,6 +250,33 @@
 	 
 	return 0;
  }
+
+const string arts[8] = {
+	// Gallows
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||\n| |/         ||\n| |          ||\n| |         (())\n| |          ``\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n\"\"\"\"\"\"\"\"\"\"|_        |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+	
+	// Head
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |           `--'\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n| |\n\"\"\"\"\"\"\"\"\"\"|_        |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+	
+	// Body
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |         \\ . . /\n| |          |   |\n| |          | . |\n| |          |___|\n| |\n| |\n| |\n| |\n| |\n\"\"\"\"\"\"\"\"\"\"|_        |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+
+	// Left arm
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |        /Y . . /\n| |       // |   |\n| |      //  | . |\n| |     ')   |___|\n| |\n| |\n| |\n| |\n| |\n\"\"\"\"\"\"\"\"\"\"|_        |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+
+// Right arm
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |        /Y . . Y\\\n| |       // |   | \\\\\n| |      //  | . |  \\\\\n| |     ')   |___|   (`\n| |\n| |\n| |\n| |\n| |\n\"\"\"\"\"\"\"\"\"\"|_        |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+
+// Left leg
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |        /Y . . Y\\\n| |       // |   | \\\\\n| |      //  | . |  \\\\\n| |     ')   | __|   (`\n| |          ||\n| |          ||\n| |          ||\n| |          ||\n| |         / |\n\"\"\"\"\"\"\"\"\"\"|_`-'     |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+
+// Right leg
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |        /Y . . Y\\\n| |       // |   | \\\\\n| |      //  | . |  \\\\\n| |     ')   | _ |   (`\n| |          || ||\n| |          || ||\n| |          || ||\n| |          || ||\n| |         / | | \\\n\"\"\"\"\"\"\"\"\"\"|_`-' `-' |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n",
+
+// Willy
+" _________.._____\n| .________))____|\n| | / /      ||\n| |/ /       ||\n| | /        ||.-''.\n| |/         |/  _  \\\n| |          ||  `/,|\n| |          (\\\\`_.'\n| |         .-`--'.\n| |        /Y . . Y\\\n| |       // |   | \\\\\n| |      //  | . |  \\\\\n| |     ')   |   |   (`\n| |          ||'||\n| |          || ||\n| |          || ||\n| |          || ||\n| |         / | | \\\n\"\"\"\"\"\"\"\"\"\"|_`-' `-' |\"\"\"|\n|\"|\"\"\"\"\"\"\"\\ \\       '\"|\"|\n| |        \\ \\        | |\n: :         \\ \\       : :  \n. .          `'       . .\n"
+	
+};
  
  /*************************************
   * random_int
@@ -209,3 +290,48 @@
 	
 	return (generator() % max);
  }
+ 
+ 
+ 
+  /*************************************
+  * print_hung
+  * param	: state - current state to print
+  * returns	: none
+  *************************************/
+  void print_hung(State state)
+  {
+	  switch (state)
+	  {
+	  case GALLOWS:
+		  cout << arts[0] << endl << endl;
+		  break;
+		
+	  case HEAD:
+		  cout << arts[1] << endl << endl;
+		  break;
+		
+	  case BODY:
+		  cout << arts[2] << endl << endl;
+		  break;
+		
+	  case L_ARM:
+		  cout << arts[3] << endl << endl;
+		  break;
+		
+	  case R_ARM:
+		  cout << arts[4] << endl << endl;
+		  break;
+		
+	  case L_LEG:
+		  cout << arts[5] << endl << endl;
+		  break;
+		
+	  case R_LEG:
+		  cout << arts[6] << endl << endl;
+		  break;
+		  
+	  case WILLY:
+	  default:
+		  cout << arts[7] << endl << endl;
+	  }
+  }
