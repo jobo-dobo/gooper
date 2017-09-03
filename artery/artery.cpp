@@ -25,7 +25,7 @@ void print_picture(Picture picture);
 
 int main()
 {
-	Picture picture = create_picture("",0,0,"");
+	Picture picture = create_picture("My Poop",10,40,"Mine poop doth life.");
 	print_picture(picture);
 	
 	return 0;
@@ -41,13 +41,15 @@ int main()
  ***************************************************/
 Picture create_picture(string title, int height, int width, string caption)
 {
-	Picture picture;
-	picture.title = "Poop";
-	picture.height = 20;
-	picture.width = 50;
-	picture.pic = new char[1000];
+	int size = height * width;
 	
-	for (int i=0; i<1000; i++)
+	Picture picture;
+	picture.title = title;
+	picture.height = height;
+	picture.width = width;
+	picture.pic = new char[size];
+	
+	for (int i=0; i<size; i++)
 	{
 		if (i % 3 == 0)
 			picture.pic[i] = 'p';
@@ -55,7 +57,7 @@ Picture create_picture(string title, int height, int width, string caption)
 			picture.pic[i] = 'o';
 	}
 	
-	picture.caption = "Eat this shit, bro.";
+	picture.caption = caption;
 	
 	return picture;
 }
@@ -67,11 +69,12 @@ Picture create_picture(string title, int height, int width, string caption)
  ***************************************************/
 void print_picture(Picture picture)
 {
+	int size = picture.height * picture.width;
 	cout << "Title: " << picture.title << endl << endl;
-	for (int i=0; i<1000; i++)
+	for (int i=0; i<size; i++)
 	{
 		cout << picture.pic[i];
-		if (i % 50 == 49)
+		if (i % picture.width == picture.width - 1)
 			cout << endl;
 	}
 	cout << endl << "Caption: " << picture.caption << endl;
