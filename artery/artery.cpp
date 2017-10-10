@@ -20,12 +20,13 @@ struct Picture
 	string caption;
 };
 
-Picture create_picture(string title, int height, int width, string caption);
+Picture create_picture(string& title, int height, int width, string caption);
 void print_picture(Picture picture);
 
 int main()
 {
-	Picture picture = create_picture("My Poop",10,40,"Mine poop doth life.");
+	sting title = "My poop";
+	Picture picture = create_picture(title,10,40,"Mine poop doth life.");
 	print_picture(picture);
 	
 	return 0;
@@ -39,8 +40,9 @@ int main()
  *			  caption - caption to picture
  * returns	: created Picture
  ***************************************************/
-Picture create_picture(string title, int height, int width, string caption)
+Picture create_picture(string& title, int height, int width, string caption)
 {
+	title += " is brown.";
 	int size = height * width;
 	
 	Picture picture;
